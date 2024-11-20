@@ -39,7 +39,10 @@ export const UserButton = () => {
       <DropdownMenuContent align={"center"} side={"right"} className="w-60">
         <DropdownMenuItem 
           className="h-10"
-          onClick={()=>signOut()}
+          onClick={()=>{
+            signOut();
+            window.location.reload()
+          }}
         >
           <LogOut className="size-4 mr-2"/>
           Log out
