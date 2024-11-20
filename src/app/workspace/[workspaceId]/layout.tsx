@@ -1,6 +1,12 @@
 "use client"
 import Sidebar from "./sidebar";
 import Toolbar from "./toolbar";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle
+} from "@/components/ui/resizable"
+import WorkspaceSidebar from "./workspace-sidebar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -12,7 +18,25 @@ const WorkspaceLayout = ({ children }: LayoutProps) => {
       <Toolbar />
       <div className="flex h-[calc(100vh-40px)]">
         <Sidebar/>
-        {children}
+        <ResizablePanelGroup
+          direction={'horizontal'}
+          autoSaveId={"slack-clone-layout"}
+        >
+          <ResizablePanel
+            defaultSize={20}
+            minSize={15}
+            className="bg-[#5e2c5f]"
+          >
+            <WorkspaceSidebar/>
+          </ResizablePanel>
+          <ResizableHandle withHandle/>s
+          <ResizablePanel
+            defaultSize={20}
+            minSize={20}
+          >
+            {children}
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
     </div>
   );
