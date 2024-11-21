@@ -26,7 +26,7 @@ const WorkspaceIdPage = () => {
   const isAdmin = useMemo(()=> member?.role === "admin", [member?.role])
 
   useEffect(() => {
-    if (workspaceLoading || channelsLoading || memberLoading || member || !workspace) return;
+    if (workspaceLoading || channelsLoading || memberLoading || !member || !workspace) return;
     if (channelId) {
       router.push(`/workspace/${workspaceId}/channel/${channelId}`);
     } else if (!open && isAdmin) {
@@ -46,14 +46,14 @@ const WorkspaceIdPage = () => {
     setOpen,
   ]);
 
-  if (workspaceLoading || channelsLoading) {
+  if (workspaceLoading || channelsLoading || memberLoading) {
     return (
       <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
         <Loader className="size-6 animate-spin text-muted-foreground"/>
       </div>
     )
   }
-  if (!workspace) {
+  if (!workspace || !member) {
     return (
       <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
         <TriangleAlert className="size-6 text-muted-foreground"/>
