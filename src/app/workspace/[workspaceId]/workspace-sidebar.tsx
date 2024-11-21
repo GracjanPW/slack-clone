@@ -15,9 +15,11 @@ import { WorkspaceSection } from "./workspace-section";
 import { useGetMembers } from "@/features/members/api/use-get-members";
 import { UserItem } from "./user-item";
 import { useCreateChannelModal } from "@/features/channels/store/use-create-channel-modal";
+import { useChannelId } from "@/hooks/use-channel-id";
 
 const WorkspaceSidebar = () => {
   const workspaceId = useWorkspaceId();
+  const channelId = useChannelId()
   const [,setOpen] = useCreateChannelModal();
 
   const { data: member, isLoading: memberLoading } = useCurrentMember({
@@ -33,7 +35,7 @@ const WorkspaceSidebar = () => {
     workspaceId,
   }) 
 
-  if (workspaceLoading || memberLoading) {
+  if (workspaceLoading || memberLoading || membersLoading || channelsLoading) {
     return (
       <div className="flex flex-col bg-[#5e2c5f] h-full items-center justify-center">
         <Loader className="size-5 animate-spin text-white" />
@@ -60,15 +62,14 @@ const WorkspaceSidebar = () => {
         <SidebarItem label="Drafts & Sent" icon={SendHorizonal} id="drafts" />
       </div>
       <WorkspaceSection label="Channels" hint="New Channel" onNew={() => setOpen(true)}>
-        {
-          channelsLoading ?? <Loader className="size-4 animate-spin"/>
-        }
+
         {channels?.map((item) => (
           <SidebarItem
             key={item._id}
             icon={HashIcon}
             label={item.name}
             id={item._id}
+            variant={channelId === item._id ?"active":"default"}
           />
         ))}
       </WorkspaceSection>
