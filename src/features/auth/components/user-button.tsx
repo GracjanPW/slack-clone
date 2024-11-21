@@ -39,8 +39,8 @@ export const UserButton = () => {
       <DropdownMenuContent align={"center"} side={"right"} className="w-60">
         <DropdownMenuItem
           className="h-10"
-          onClick={() => {
-            signOut();
+          onClick={async () => {
+            await signOut();
             window.location.reload();
           }}
         >
