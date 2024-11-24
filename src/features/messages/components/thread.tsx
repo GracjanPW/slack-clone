@@ -11,9 +11,12 @@ import { useCreateMessage } from "../api/use-create-message";
 import { useGenerateUploadUrl } from "@/features/upload/api/use-generate-upload-url";
 import { useChannelId } from "@/hooks/use-channel-id";
 import { toast } from "sonner";
-import Editor from "@/components/editor";
 import { useGetMessages } from "../api/use-get-messages";
 import { differenceInMinutes, format, isToday, isYesterday } from "date-fns";
+import dynamic from "next/dynamic";
+
+
+const Editor = dynamic(()=>import("@/components/editor"),{ssr:false})
 
 const TIME_THRESHOLD = 5;
 
@@ -129,7 +132,7 @@ export const Thread = ({ messageId, onClose }: ThreadProps) => {
     {} as Record<string, typeof results>
   );
 
-  if (isMessageLoading || status === "LoadingFirstPage") {
+  if (isMessageLoading || status === "LoadingFirstPage" || isMemberLoading) {
     return (
       <div className="h-full flex flex-col">
         <div className="flex justify-between items-center h-[49px] px-4 border-b">
