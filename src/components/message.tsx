@@ -13,6 +13,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useToggleReaction } from "@/features/reactions/api/use-toggle-reaction";
 import { Reactions } from "./reactions";
 import { usePannel } from "@/hooks/use-pannel";
+import { ThreadBar } from "./thread-bar";
 
 const Renderer = dynamic(() => import("@/components/renderer"), { ssr: false });
 const Editor = dynamic(() => import("@/components/editor"), { ssr: false });
@@ -39,6 +40,7 @@ interface MessageProps {
   hideThreadButton?: boolean;
   threadCount?: number;
   threadImage?: string;
+  threadName?:string;
   threadTimestamp?: number;
 }
 
@@ -48,7 +50,6 @@ const formatFullTime = (date: Date) => {
 
 export const Message = ({
   id,
-  memberId,
   authorImage,
   isAuthor,
   authorName = "Member",
@@ -63,9 +64,10 @@ export const Message = ({
   hideThreadButton,
   threadCount,
   threadImage,
+  threadName,
   threadTimestamp,
 }: MessageProps) => {
-  const {parentMessageId,onOpenMessage, onClose} = usePannel(); 
+  const { parentMessageId, onOpenMessage, onClose } = usePannel();
   const [ConfirmDialog, confirm] = useConfirm(
     "Delete message",
     "Are you sure you want to delete this message? This can not be undone."
@@ -76,7 +78,8 @@ export const Message = ({
     useUpdateMessage();
   const { mutate: removeMessage, isPending: isRemovePending } =
     useRemoveMessage();
-  const {mutate: toggleReaction, isPending: isTogglePending} = useToggleReaction();
+  const { mutate: toggleReaction, isPending: isTogglePending } =
+    useToggleReaction();
 
   const isPending = isUpdatePending || isRemovePending || isTogglePending;
 
@@ -104,7 +107,7 @@ export const Message = ({
       {
         onSuccess() {
           toast.success("Message removed");
-          if (parentMessageId===id) {
+          if (parentMessageId === id) {
             onClose();
           }
         },
@@ -115,16 +118,19 @@ export const Message = ({
     );
   };
 
-  const handleReaction = async (value:string) => {
-    toggleReaction({
-      messageId: id,
-      value
-    }, {
-      onError: () => {
-        toast.error("Reaction failed")
+  const handleReaction = async (value: string) => {
+    toggleReaction(
+      {
+        messageId: id,
+        value,
+      },
+      {
+        onError: () => {
+          toast.error("Reaction failed");
+        },
       }
-    })
-  }
+    );
+  };
 
   if (isCompact) {
     return (
@@ -163,7 +169,14 @@ export const Message = ({
                     (edited)
                   </span>
                 ) : null}
-                <Reactions data={reactions} onChange={handleReaction}/>
+                <Reactions data={reactions} onChange={handleReaction} />
+                <ThreadBar
+                  name={threadName}
+                  count={threadCount}
+                  onClick={()=> onOpenMessage(id)}
+                  image={threadImage}
+                  timestamp={threadTimestamp}
+                />
               </div>
             )}
           </div>
@@ -235,7 +248,14 @@ export const Message = ({
               {updatedAt ? (
                 <span className="text-xs text-muted-foreground">(edited)</span>
               ) : null}
-              <Reactions data={reactions} onChange={handleReaction}/>
+              <Reactions data={reactions} onChange={handleReaction} />
+              <ThreadBar
+                name={threadName}
+                count={threadCount}
+                image={threadImage}
+                onClick={()=> onOpenMessage(id)}
+                timestamp={threadTimestamp}
+              />
             </div>
           )}
         </div>
