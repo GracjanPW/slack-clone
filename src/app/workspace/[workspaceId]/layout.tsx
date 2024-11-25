@@ -7,7 +7,7 @@ import {
   ResizableHandle
 } from "@/components/ui/resizable"
 import WorkspaceSidebar from "./workspace-sidebar";
-import { usePannel } from "@/hooks/use-pannel";
+import { usePanel } from "@/hooks/use-panel";
 import { Loader } from "lucide-react";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { Thread } from "@/features/messages/components/thread";
@@ -18,7 +18,7 @@ interface LayoutProps {
 }
 
 const WorkspaceLayout = ({ children }: LayoutProps) => {
-  const { parentMessageId, profileMemberId, onClose} = usePannel();
+  const { parentMessageId, profileMemberId, onClose} = usePanel();
 
   const showPanel = !!parentMessageId || !!profileMemberId;
 
@@ -41,6 +41,7 @@ const WorkspaceLayout = ({ children }: LayoutProps) => {
           <ResizableHandle withHandle/>
           <ResizablePanel
             minSize={20}
+            defaultSize={80}
           >
             {children}
           </ResizablePanel>

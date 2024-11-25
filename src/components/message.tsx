@@ -12,7 +12,7 @@ import { useRemoveMessage } from "@/features/messages/api/use-remove-message";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useToggleReaction } from "@/features/reactions/api/use-toggle-reaction";
 import { Reactions } from "./reactions";
-import { usePannel } from "@/hooks/use-pannel";
+import { usePanel } from "@/hooks/use-panel";
 import { ThreadBar } from "./thread-bar";
 
 const Renderer = dynamic(() => import("@/components/renderer"), { ssr: false });
@@ -68,7 +68,7 @@ export const Message = ({
   threadName,
   threadTimestamp,
 }: MessageProps) => {
-  const { parentMessageId, onOpenMessage, onOpenProfile, onClose } = usePannel();
+  const { parentMessageId, onOpenMessage, onOpenProfile, onClose } = usePanel();
   const [ConfirmDialog, confirm] = useConfirm(
     "Delete message",
     "Are you sure you want to delete this message? This can not be undone."

@@ -1,7 +1,7 @@
 import { useProfileMemberId } from "@/features/members/store/use-profile-member-id";
 import { useParentMessageId } from "@/features/messages/store/use-parent-message-id";
 
-export const usePannel = () => {
+export const usePanel = () => {
   const [parentMessageId, setParentMessageId] = useParentMessageId();
   const [profileMemberId, setProfileMemberId] = useProfileMemberId();
   
